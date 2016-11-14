@@ -1,5 +1,5 @@
 # Isban Tunneling
-FROM ubuntu
+FROM ubuntu:16.10
 MAINTAINER Jose M. Fernandez-Alba <jm.fernandezalba@commonms.com>
 
 # SSH port
