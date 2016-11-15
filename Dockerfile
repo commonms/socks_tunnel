@@ -35,9 +35,3 @@ COPY entrypoint.sh /bin/
 RUN chmod 755 /bin/entrypoint.sh
 
 ENTRYPOINT ["/bin/entrypoint.sh"]
-
-# Add normal user
-RUN useradd -m $TARGET_PROXY_USER \
-    && echo "$TARGET_PROXY_PASS\n$TARGET_PROXY_PASS\n" | passwd $TARGET_PROXY_USER
-
-USER $TARGET_PROXY_USER
