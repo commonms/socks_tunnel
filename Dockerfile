@@ -1,16 +1,30 @@
-# Isban Tunneling
+# Socks Tunnel container
 FROM ubuntu:16.10
 MAINTAINER Jose M. Fernandez-Alba <jm.fernandezalba@commonms.com>
 
-# SSH port
-EXPOSE 22
+# Non standard SSH port
+EXPOSE 443
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
 	openssh-server \
     sshpass \
+	corkscrew \
 	netcat-openbsd \
+	vim \
+	nano \
+	iputils-ping \
 	&& rm -rf /var/lib/apt/lists/*
+
+# Container credentials
+ENV CONTAINER_USER root
+ENV CONTAINER_PASS common$
+
+RUN echo "$CONTAINER_PASS\n$CONTAINER_PASS\n" | passwd $CONTAINER_USER
+
+# Adjust SSHD configuration
+RUN sed -i '/Port/c\Port 443' /etc/ssh/sshd_config \
+	&& sed -i '/PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config
 
 # Isban proxy
 ENV CORPORATE_PROXY_HOST 172.31.219.30
@@ -31,7 +45,7 @@ ENV TARGET_PROXY_USER commonms
 ENV TARGET_PROXY_PASS common$
 
 # Entrypoint starts SSHD
-COPY entrypoint.sh /bin/
-RUN chmod 755 /bin/entrypoint.sh
+COPY entrypoint.sh /sbin/
+RUN chmod 755 /sbin/entrypoint.sh
 
-ENTRYPOINT ["/bin/entrypoint.sh"]
+ENTRYPOINT ["/sbin/entrypoint.sh"]
