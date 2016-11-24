@@ -8,7 +8,7 @@ EXPOSE 443
 # Install dependencies
 RUN apt-get update && apt-get install -y \
 	openssh-server \
-    sshpass \
+	sshpass \
 	corkscrew \
 	netcat-openbsd \
 	vim \
@@ -34,7 +34,8 @@ ENV http_proxy http://$CORPORATE_PROXY_HOST:$CORPORATE_PROXY_PORT
 ENV HTTP_PROXY $http_proxy
 ENV https_proxy $http_proxy
 ENV HTTPS_PROXY $http_proxy
-ENV NO_PROXY 127.0.0.1
+ENV no_proxy localhost,127.0.0.1,192.168.99.1,192.168.99.100
+ENV NO_PROXY localhost,127.0.0.1,192.168.99.1,192.168.99.100
 
 RUN echo "Acquire::http::Proxy \"$HTTP_PROXY\";" > /etc/apt/apt.conf
 
